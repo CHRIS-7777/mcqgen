@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 📝 Quiz App – Test Your Knowledge! 🎯📱
 📌 Overview
 The Quiz App is a Flutter-based application designed to test users' knowledge through multiple-choice questions (MCQs). It ensures fairness by allowing each participant to take the quiz only once. A secure scoreboard stores and ranks scores in descending order, accessible only with an admin PIN.
@@ -31,3 +32,21 @@ Material UI Components – Ensures a clean and user-friendly interface.
 The Scoreboard is restricted and accessible only with a PIN (default: 1234).
 An alert is displayed for incorrect PIN entries.
 This project provides an interactive way for users to test their knowledge while ensuring fair play and secure score tracking! 🚀📚
+=======
+# mcqgen
+
+A new Flutter project.
+
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
+>>>>>>> 7c97a61 (Initial commit)
