@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Cricket Quiz',
+      title: 'Cricket-Quiz',
       theme: ThemeData(primarySwatch: Colors.blue),
       initialRoute: '/welcome', // Set initial route
       routes: {

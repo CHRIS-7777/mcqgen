@@ -34,7 +34,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     if (_nameController.text.trim().isEmpty) {
       _showAlert("Name Required", "Please enter your name before starting the quiz.");
     } else if (hasAttemptedQuiz) {
-      _showAlert("Quiz Already Attempted", "You have already attended the quiz! You cannot attempt it again.");
+      _showAlert("Quiz Already Attempted in this Device","");
     } else {
       _saveQuizAttempt();
       Navigator.push(
@@ -65,9 +65,19 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        title: Text("Cricket Quiz App", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60),
+        child: ClipRRect(
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
+          ),
+          child: AppBar(
+            title: Center(child: Text("Cricket Quiz App", style: TextStyle(color: Colors.white))),
+            backgroundColor: const Color.fromARGB(255, 66, 66, 66),
+            elevation: 0,
+          ),
+        ),
       ),
       body: Padding(
         padding: EdgeInsets.all(20.0),
@@ -94,13 +104,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 fillColor: Colors.grey[900],
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 60),
             ElevatedButton(
               onPressed: _startQuiz,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 44),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -113,12 +123,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.white,
                 foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 60),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: Text("View Scoreboard", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              child: Text("Score", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
           ],
         ),

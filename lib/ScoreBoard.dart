@@ -31,7 +31,10 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
         barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.grey[850], // Dark Grey Background
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15), // Rounded Corners
+            ),
             title: Text("Enter PIN", style: TextStyle(color: Colors.white)),
             content: TextField(
               controller: _pinController,
@@ -43,9 +46,11 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                 labelStyle: TextStyle(color: Colors.white70),
                 enabledBorder: OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
+                  borderSide: BorderSide(color: Colors.blueAccent),
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
             ),
@@ -66,7 +71,10 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                     });
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Incorrect PIN!")),
+                      SnackBar(
+                        content: Text("Incorrect PIN!", style: TextStyle(color: Colors.white)),
+                        backgroundColor: Colors.redAccent,
+                      ),
                     );
                   }
                 },
@@ -99,20 +107,29 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         title: Text("Scoreboard", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.grey[900],
       ),
       body: _isAuthenticated
           ? scores.isNotEmpty
               ? ListView.builder(
                   itemCount: scores.length,
                   itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(scores[index]['name'], style: TextStyle(color: Colors.white)),
-                      trailing: Text("Score: ${scores[index]['score']}", style: TextStyle(color: Colors.white)),
+                    return Card(
+                      color: Colors.grey[800],
+                      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ListTile(
+                        title: Text(scores[index]['name'], style: TextStyle(color: Colors.white)),
+                        trailing: Text("Score: ${scores[index]['score']}", style: TextStyle(color: Colors.white)),
+                      ),
                     );
                   },
                 )
-              : Center(child: Text("No scores available.", style: TextStyle(color: Colors.white)))
+              : Center(
+                  child: Text("No scores available.", style: TextStyle(color: Colors.white)),
+                )
           : Center(child: CircularProgressIndicator()),
     );
   }
