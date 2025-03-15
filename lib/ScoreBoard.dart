@@ -14,45 +14,55 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
   @override
   void initState() {
     super.initState();
-    _loadScores(); // Load scores but do NOT call showDialog() here
+    _loadScores();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _authenticateUser(); // Call authentication in didChangeDependencies()
+    _authenticateUser();
   }
 
-  // Show PIN dialog
   void _authenticateUser() {
     TextEditingController _pinController = TextEditingController();
-    Future.delayed(Duration.zero, () { // Ensure it's called after widget is built
+    Future.delayed(Duration.zero, () {
       showDialog(
         context: context,
-        barrierDismissible: false, // Prevent closing without entering PIN
+        barrierDismissible: false,
         builder: (context) {
           return AlertDialog(
-            title: Text("Enter PIN"),
+            backgroundColor: Colors.black,
+            title: Text("Enter PIN", style: TextStyle(color: Colors.white)),
             content: TextField(
               controller: _pinController,
               obscureText: true,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: "PIN"),
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: "PIN",
+                labelStyle: TextStyle(color: Colors.white70),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+              ),
             ),
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context); // Close the dialog
-                  Navigator.pop(context); // Go back to the Welcome page
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                 },
-                child: Text("Cancel"),
+                child: Text("Cancel", style: TextStyle(color: Colors.white)),
               ),
               TextButton(
                 onPressed: () {
                   if (_pinController.text == _correctPin) {
-                    Navigator.pop(context); // Close the PIN dialog
+                    Navigator.pop(context);
                     setState(() {
-                      _isAuthenticated = true; // Unlock the scoreboard
+                      _isAuthenticated = true;
                     });
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -60,7 +70,7 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
                     );
                   }
                 },
-                child: Text("Submit"),
+                child: Text("Submit", style: TextStyle(color: Colors.white)),
               ),
             ],
           );
@@ -69,7 +79,6 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
     });
   }
 
-  // Load scores from SharedPreferences
   void _loadScores() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? storedScores = prefs.getStringList('scores');
@@ -79,7 +88,7 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
           List<String> parts = e.split('-');
           return {"name": parts[0], "score": int.parse(parts[1])};
         }).toList();
-        scores.sort((a, b) => b['score'].compareTo(a['score'])); // Sort by score (highest first)
+        scores.sort((a, b) => b['score'].compareTo(a['score']));
       });
     }
   }
@@ -87,20 +96,24 @@ class _ScoreboardScreenState extends State<ScoreboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Scoreboard")),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text("Scoreboard", style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
+      ),
       body: _isAuthenticated
           ? scores.isNotEmpty
               ? ListView.builder(
                   itemCount: scores.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      title: Text(scores[index]['name']),
-                      trailing: Text("Score: ${scores[index]['score']}"),
+                      title: Text(scores[index]['name'], style: TextStyle(color: Colors.white)),
+                      trailing: Text("Score: ${scores[index]['score']}", style: TextStyle(color: Colors.white)),
                     );
                   },
                 )
-              : Center(child: Text("No scores available."))
-          : Center(child: CircularProgressIndicator()), // Show loading if still locked
+              : Center(child: Text("No scores available.", style: TextStyle(color: Colors.white)))
+          : Center(child: CircularProgressIndicator()),
     );
   }
 }

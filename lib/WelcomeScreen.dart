@@ -18,7 +18,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     _checkQuizAttempt();
   }
 
-  // Check if the user has already attempted the quiz
   Future<void> _checkQuizAttempt() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -26,95 +25,100 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     });
   }
 
-  // Save quiz attempt to prevent retaking
   Future<void> _saveQuizAttempt() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('hasAttemptedQuiz', true);
   }
 
-  // Function to start the quiz
   void _startQuiz() {
     if (_nameController.text.trim().isEmpty) {
-      // Show an alert box if the name field is empty
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Name Required"),
-            content: Text("Please enter your name before starting the quiz."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close the dialog
-                },
-                child: Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
+      _showAlert("Name Required", "Please enter your name before starting the quiz.");
     } else if (hasAttemptedQuiz) {
-      // Show an alert box if the user has already attended the quiz
-      showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text("Quiz Already Attempted"),
-            content: Text("You have already attended the quiz!"),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Close the dialog
-                },
-                child: Text("OK"),
-              ),
-            ],
-          );
-        },
-      );
+      _showAlert("Quiz Already Attempted", "You have already attended the quiz! You cannot attempt it again.");
     } else {
-      // Start quiz and mark as attempted
       _saveQuizAttempt();
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (context) => QuizScreen(userName: _nameController.text.trim()),
-        ),
+        MaterialPageRoute(builder: (context) => QuizScreen(userName: _nameController.text.trim())),
       );
     }
   }
 
-  // Navigate to Scoreboard directly
-  void _goToScoreboard() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ScoreboardScreen()), // No Dialog, Direct Navigation
+  void _showAlert(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.black,
+        title: Text(title, style: TextStyle(color: Colors.white)),
+        content: Text(message, style: TextStyle(color: Colors.white)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("OK", style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Cricket Quiz")),
+      backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text("Cricket Quiz App", style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.black,
+      ),
       body: Padding(
         padding: EdgeInsets.all(20.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Enter Your Name", style: TextStyle(fontSize: 20)),
+            Text("Enter Your Name", style: TextStyle(fontSize: 20, color: Colors.white)),
+            SizedBox(height: 10),
             TextField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: "Name"),
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: "Name",
+                labelStyle: TextStyle(color: Colors.white70),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                filled: true,
+                fillColor: Colors.grey[900],
+              ),
             ),
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: _startQuiz,
-              child: Text("Start Quiz"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text("Start Quiz", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
             SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _goToScoreboard, // Navigate without Dialog
-              child: Text("View Scoreboard"),
+              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ScoreboardScreen())),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text("View Scoreboard", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
           ],
         ),
