@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "681718403729",
+    "project_id": "mcqgen-3fd8c",
+    "storage_bucket": "mcqgen-3fd8c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:681718403729:android:a272d94841f8ed99dba530",
+        "android_client_info": {
+          "package_name": "com.example.mcqgen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3oyi74Dq3HGQmJFb9iClysSxgxu3aIkM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

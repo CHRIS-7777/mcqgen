@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mcqgen/QuizScreen.dart';
+import 'package:mcqgen/scoreboard.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'QuizScreen.dart';
-import 'Scoreboard.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -10,127 +10,182 @@ class WelcomeScreen extends StatefulWidget {
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
   TextEditingController _nameController = TextEditingController();
-  bool hasAttemptedQuiz = false;
+  TextEditingController _pinController = TextEditingController();
+  final String correctPin = "1234"; // Set your PIN
 
   @override
   void initState() {
     super.initState();
-    _checkQuizAttempt();
+    _checkAttemptStatus();
   }
 
-  Future<void> _checkQuizAttempt() async {
+  bool hasAttempted = false; // Flag for checking attempt
+
+  Future<void> _checkAttemptStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      hasAttemptedQuiz = prefs.getBool('hasAttemptedQuiz') ?? false;
+      hasAttempted = prefs.getBool('hasAttemptedQuiz') ?? false;
     });
   }
 
-  Future<void> _saveQuizAttempt() async {
+  Future<void> _startQuiz() async {
+    if (hasAttempted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("You have already attempted the quiz on this device!")),
+      );
+      return;
+    }
+
+    String userName = _nameController.text.trim();
+    if (userName.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Please enter your name")),
+      );
+      return;
+    }
+
+    // Store attempt status on this device
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('hasAttemptedQuiz', true);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => QuizScreen(userName: userName),
+      ),
+    );
   }
 
-  void _startQuiz() {
-    if (_nameController.text.trim().isEmpty) {
-      _showAlert("Name Required", "Please enter your name before starting the quiz.");
-    } else if (hasAttemptedQuiz) {
-      _showAlert("Quiz Already Attempted in this Device","");
-    } else {
-      _saveQuizAttempt();
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => QuizScreen(userName: _nameController.text.trim())),
-      );
-    }
-  }
-
-  void _showAlert(String title, String message) {
+  void _showPinDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.black,
-        title: Text(title, style: TextStyle(color: Colors.white)),
-        content: Text(message, style: TextStyle(color: Colors.white)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text("OK", style: TextStyle(color: Colors.white)),
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          backgroundColor: Colors.black87,
+          title: Text("Enter pin", style: TextStyle(color: Colors.white)),
+          content: TextField(
+            controller: _pinController,
+            obscureText: true,
+            keyboardType: TextInputType.number,
+            style: TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              labelText: "pin",
+              labelStyle: TextStyle(color: Colors.white70),
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+            ),
           ),
-        ],
-      ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Cancel", style: TextStyle(color: Colors.redAccent)),
+            ),
+            TextButton(
+              onPressed: () {
+                if (_pinController.text == correctPin) {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ScoreboardScreen()),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Incorrect PIN!")),
+                  );
+                }
+              },
+              child: Text("Submit", style: TextStyle(color: Colors.greenAccent)),
+            ),
+          ],
+        );
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color.fromARGB(255, 31, 31, 31),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(60),
-        child: ClipRRect(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20),
-            bottomRight: Radius.circular(20),
+        child: AppBar(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
           ),
-          child: AppBar(
-            title: Center(child: Text("Cricket Quiz App", style: TextStyle(color: Colors.white))),
-            backgroundColor: const Color.fromARGB(255, 66, 66, 66),
-            elevation: 0,
+          title: Text("IPL - QUIZ", style: TextStyle(fontSize: 24,color:Colors.white)),
+          centerTitle: true,
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                  colors: [Colors.indigo,Colors.teal],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
           ),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Enter Your Name", style: TextStyle(fontSize: 20, color: Colors.white)),
-            SizedBox(height: 10),
-            TextField(
-              controller: _nameController,
-              style: TextStyle(color: Colors.white),
-              decoration: InputDecoration(
-                labelText: "Name",
-                labelStyle: TextStyle(color: Colors.white70),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                filled: true,
-                fillColor: Colors.grey[900],
+      body: Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                "Enter Your Name",
+                style: TextStyle(fontSize: 22, color: Colors.white),
               ),
-            ),
-            SizedBox(height: 60),
-            ElevatedButton(
-              onPressed: _startQuiz,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 44),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+              SizedBox(height: 10),
+              TextField(
+                controller: _nameController,
+                style: TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  filled: true,
+                  fillColor: const Color.fromARGB(255, 77, 77, 77),
+                  labelText: "Name",
+                  labelStyle: TextStyle(color: const Color.fromARGB(179, 255, 255, 255)),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: Colors.white),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(color: const Color.fromARGB(255, 255, 255, 255), width: 2),
+                  ),
                 ),
               ),
-              child: Text("Start Quiz", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => ScoreboardScreen())),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
-                padding: EdgeInsets.symmetric(vertical: 16, horizontal: 60),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+              SizedBox(height: 100),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: _startQuiz,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text("Start Quiz", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
               ),
-              child: Text("Score", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-            ),
-          ],
+              SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: _showPinDialog,
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Text("View Score", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
