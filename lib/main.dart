@@ -1,6 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:mcqgen/QuizScreen.dart';
+import 'package:mcqgen/ScoreBoard.dart';
 import 'package:mcqgen/WelcomeScreen.dart';
+import 'package:mcqgen/thankyouscreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +27,9 @@ class MyApp extends StatelessWidget {
       initialRoute: '/welcome', // Set initial route
       routes: {
       '/welcome': (context) => WelcomeScreen(),
+      '/quiz': (context) => QuizScreen(userName: 'hi'),
+      '/thank': (context) => ThankYouScreen(userName: ''),
+      '/score': (context) =>ScoreboardScreen(),
       }
     );
   }

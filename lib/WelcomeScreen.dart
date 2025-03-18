@@ -31,7 +31,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   Future<void> _startQuiz() async {
     if (hasAttempted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("You have already attempted the quiz on this device!")),
+        SnackBar(content: Text("🤯 Already attend panitinga Bro...")),
       );
       return;
     }
@@ -63,14 +63,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         return AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           backgroundColor: Colors.black87,
-          title: Text("Enter pin", style: TextStyle(color: Colors.white)),
+          title: Text("Pin Theriyuma:🤨", style: TextStyle(color: Colors.white)),
           content: TextField(
             controller: _pinController,
             obscureText: true,
             keyboardType: TextInputType.number,
             style: TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              labelText: "pin",
+              labelText: "Pin:",
               labelStyle: TextStyle(color: Colors.white70),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
             ),
@@ -80,7 +80,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("Cancel", style: TextStyle(color: Colors.redAccent)),
+              child: Text("Cancel", style: TextStyle(color: const Color.fromARGB(255, 255, 119, 119))),
             ),
             TextButton(
               onPressed: () {
@@ -92,7 +92,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   );
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text("Incorrect PIN!")),
+                    SnackBar(content: Text("Pin Thappu Bro🤯..")),
                   );
                 }
               },
@@ -107,86 +107,112 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 31, 31, 31),
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60),
-        child: AppBar(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
-          ),
-          title: Text("IPL - QUIZ", style: TextStyle(fontSize: 24,color:Colors.white)),
-          centerTitle: true,
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                  colors: [Colors.indigo,Colors.teal],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
+      body: Stack(
+        children: [
+        Opacity(
+            opacity: 1,
+            child: Image.asset(
+              "assets/ip.jpg",
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
             ),
           ),
-        ),
-      ),
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Column(
             children: [
-              Text(
-                "Enter Your Name",
-                style: TextStyle(fontSize: 22, color: Colors.white),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _nameController,
-                style: TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: const Color.fromARGB(255, 77, 77, 77),
-                  labelText: "Name",
-                  labelStyle: TextStyle(color: const Color.fromARGB(179, 255, 255, 255)),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.white),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: const Color.fromARGB(255, 255, 255, 255), width: 2),
-                  ),
-                ),
-              ),
-              SizedBox(height: 100),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _startQuiz,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
+              AppBar(
+  backgroundColor: Colors.transparent, // Make AppBar background transparent
+  elevation: 0, // Remove shadow
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.vertical(bottom: Radius.circular(20)),
+  ),
+  title: Text("✨IPL QUIZ✨", style: TextStyle(fontSize: 35, color: Colors.white,fontWeight: FontWeight.bold)),
+  centerTitle: true,
+  flexibleSpace: Container(
+    
+  ),
+),
+
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "🏏Enter Your Name",
+                          style: TextStyle(fontSize: 20, color: const Color.fromARGB(255, 255, 255, 255)),
+                        ),
+                        SizedBox(height: 10),
+                        TextField(
+                          controller: _nameController,
+                          style: TextStyle(color: Colors.white),
+                          decoration: InputDecoration(
+                            filled: true,
+                            fillColor: const Color.fromARGB(255, 159, 2, 2).withOpacity(0.4),
+                            labelText: "Name:",
+                            labelStyle: TextStyle(color: const Color.fromARGB(255, 255, 255, 255)),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(color: Colors.white, width: 1),
+                            
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 130),
+                        SizedBox(
+  width: double.infinity,
+  height: 50,
+  child: ElevatedButton(
+    onPressed: _startQuiz,
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color.fromARGB(255, 159, 2, 2).withOpacity(0.4),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: Colors.white, width: 1), // White border
+      ),
+      
+    ),
+    child: Text(
+      "Start Quiz",
+      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+    ),
+  ),
+),
+SizedBox(height:10),
+  SizedBox(
+  width: double.infinity,
+  height: 50,
+  child: ElevatedButton(
+    onPressed: _showPinDialog,
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color.fromARGB(255, 159, 2, 2).withOpacity(0.4),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: Colors.white, width: 1), // White border
+      ),
+  
+    ),
+    child: Text(
+      "View Score",
+      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+    ),
+  ),
+),
+
+                      ],
                     ),
                   ),
-                  child: Text("Start Quiz", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                ),
-              ),
-              SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: _showPinDialog,
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Text("View Score", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }
