@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mcqgen/scoreboard.dart'; // Import ScoreboardScreen if needed
+// import 'package:mcqgen/scoreboard.dart'; // Import ScoreboardScreen if needed
 
 class ThankYouScreen extends StatelessWidget {
   final String userName;
